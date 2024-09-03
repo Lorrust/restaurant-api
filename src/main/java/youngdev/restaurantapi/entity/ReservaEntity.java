@@ -23,6 +23,7 @@ public class ReservaEntity {
     private LocalDate data_reserva;
     @Column(nullable = false)
     private Integer quantidade_pessoas;
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private StatusEnum status;
     @Column

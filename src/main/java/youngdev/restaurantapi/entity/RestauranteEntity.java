@@ -24,6 +24,7 @@ public class RestauranteEntity {
     private String cnpj;
     @Column(nullable = false)
     private Integer estrelas;
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private ComidaEnum tipo_comida;
 

@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity(name = "cliente")
-public class ClienteEntity extends PessoaEntity {
+public class ClienteEntity extends PessoaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Entity(name = "cliente")
-public class FuncionarioEntity extends PessoaEntity {
+@Entity(name = "funcionario")
+public class FuncionarioEntity extends PessoaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

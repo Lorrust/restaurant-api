@@ -7,7 +7,7 @@ import youngdev.restaurantapi.enums.SexoEnum;
 import java.time.LocalDate;
 
 @MappedSuperclass
-public class PessoaEntity {
+public class PessoaBaseEntity {
 
     @Column(nullable = false)
     private String nome;

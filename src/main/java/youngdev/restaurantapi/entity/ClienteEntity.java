@@ -52,4 +52,9 @@ public class ClienteEntity extends PessoaBaseEntity {
         this.flgBloqueado = cliente.getFlgBloqueado();
     }
 
+    public ClienteEntity updateCliente(ClienteDto updatedCliente) {
+        this.telefone = updatedCliente.getTelefone();
+        return this;
+    }
+
 }

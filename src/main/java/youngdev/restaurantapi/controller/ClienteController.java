@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import youngdev.restaurantapi.dto.ClienteDto;
-import youngdev.restaurantapi.repository.RestauranteRepository;
 import youngdev.restaurantapi.service.ClienteService;
 
 import java.util.List;
@@ -16,8 +15,6 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
-    @Autowired
-    private RestauranteRepository restauranteRepository;
 
     @GetMapping()
     public List<ClienteDto> getAllClientes() {
@@ -39,7 +36,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ClienteDto saveCliente(@RequestBody ClienteDto newCliente) {
+    public ClienteDto postCliente(@RequestBody ClienteDto newCliente) {
         return clienteService.postCliente(newCliente);
     }
 

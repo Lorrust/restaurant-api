@@ -3,6 +3,7 @@ package youngdev.restaurantapi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import youngdev.restaurantapi.dto.ClienteDto;
+import youngdev.restaurantapi.dto.RestauranteDto;
 import youngdev.restaurantapi.entity.ClienteEntity;
 import youngdev.restaurantapi.entity.RestauranteEntity;
 import youngdev.restaurantapi.repository.ClienteRepository;
@@ -10,6 +11,7 @@ import youngdev.restaurantapi.service.ClienteService;
 import youngdev.restaurantapi.service.RestauranteService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -45,6 +47,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteDto updateCliente(Long id, ClienteDto updatedCliente) {
+        Optional<ClienteEntity> clienteEntity = repository.findById(id);
+        if (clienteEntity.isPresent()) {
+            clienteEntity.get().updateCliente(updatedCliente);
+            var clientePersistido = repository.save(clienteEntity.get());
+            return new ClienteDto(clientePersistido);
+        }
         return null;
     }
 
@@ -52,4 +60,5 @@ public class ClienteServiceImpl implements ClienteService {
     public void deleteCliente(Long id) {
         repository.deleteById(id);
     }
+
 }

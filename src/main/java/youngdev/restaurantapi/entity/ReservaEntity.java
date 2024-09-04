@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import youngdev.restaurantapi.dto.ReservaDto;
 import youngdev.restaurantapi.enums.StatusEnum;
 
 import java.time.LocalDate;
@@ -20,9 +21,9 @@ public class ReservaEntity {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate data_reserva;
+    private LocalDate dataReserva;
     @Column(nullable = false)
-    private Integer quantidade_pessoas;
+    private Integer quantidadePessoas;
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private StatusEnum status;
@@ -41,5 +42,15 @@ public class ReservaEntity {
 
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private List<PedidoEntity> pedidos;
+
+    public ReservaEntity(ReservaDto reserva, ClienteEntity cliente, MesaEntity mesa) {
+        this.id = reserva.getId();
+        this.cliente = cliente;
+        this.mesa = mesa;
+        this.dataReserva = reserva.getDataReserva();
+        this.quantidadePessoas = reserva.getQuantidadePessoas();
+        this.status = StatusEnum.AGENDADA;
+        this.observacao = reserva.getObservacao();
+    }
 
 }

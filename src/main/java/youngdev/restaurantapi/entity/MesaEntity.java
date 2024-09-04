@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import youngdev.restaurantapi.dto.MesaDto;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class MesaEntity {
     @Column(nullable = false)
     private Integer numero;
     @Column(nullable = false)
-    private Integer capacidade_pessoas;
+    private Integer capacidadePessoas;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "restaurante_id", nullable = false)
@@ -28,5 +29,12 @@ public class MesaEntity {
 
     @OneToMany(mappedBy = "mesa", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private List<ReservaEntity> reservas;
+
+    public MesaEntity(MesaDto mesa, RestauranteEntity restaurante) {
+        this.id = mesa.getId();
+        this.restaurante = restaurante;
+        this.numero = mesa.getNumero();
+        this.capacidadePessoas = mesa.getCapacidadePessoas();
+    }
 
 }

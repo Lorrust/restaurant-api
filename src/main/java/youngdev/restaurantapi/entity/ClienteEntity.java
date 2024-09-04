@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
+import youngdev.restaurantapi.dto.ClienteDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,18 +19,37 @@ public class ClienteEntity extends PessoaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Column
-    private LocalDate data_cadastro;
+    protected LocalDate dataCadastro;
     @Column
-    private Integer quantidade_reservas;
+    protected Integer quantidadeReservas;
+    @Column
+    protected BigDecimal quantidadeValorGasto;
+    @Column
+    protected Boolean flgBloqueado;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    private List<ReservaEntity> reservas;
+    protected List<ReservaEntity> reservas;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "restaurante_id", nullable = false)
-    private RestauranteEntity restaurante;
+    protected RestauranteEntity restaurante;
+
+    public ClienteEntity(ClienteDto cliente, RestauranteEntity restaurante) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.sobrenome = cliente.getSobrenome();
+        this.cpf = cliente.getCpf();
+        this.dataNascimento = cliente.getDataNascimento();
+        this.sexo = cliente.getSexo();
+        this.telefone = cliente.getTelefone();
+        this.restaurante = restaurante;
+        this.dataCadastro = LocalDate.now();
+        this.quantidadeReservas = cliente.getQuantidadeReservas();
+        this.quantidadeValorGasto = cliente.getQuantidadeValorGasto();
+        this.flgBloqueado = cliente.getFlgBloqueado();
+    }
 
 }

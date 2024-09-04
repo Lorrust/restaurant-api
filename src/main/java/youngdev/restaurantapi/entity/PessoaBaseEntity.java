@@ -14,17 +14,17 @@ import java.time.LocalDate;
 public class PessoaBaseEntity {
 
     @Column(nullable = false)
-    private String nome;
+    protected String nome;
     @Column(nullable = false)
-    private String sobrenome;
+    protected String sobrenome;
     @Column(unique = true)
-    private String cpf;
+    protected String cpf;
     @Column(nullable = false)
-    private LocalDate data_nascimento;
+    protected LocalDate dataNascimento;
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
-    private SexoEnum sexo;
+    protected SexoEnum sexo;
     @Column(unique = true)
-    private String telefone;
+    protected String telefone;
 
 }

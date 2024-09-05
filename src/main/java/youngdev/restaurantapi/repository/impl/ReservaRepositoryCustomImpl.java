@@ -11,6 +11,7 @@ import java.util.List;
 
 public class ReservaRepositoryCustomImpl implements ReservaRepositoryCustom {
 
+//    TODO: Create custom query to obtain all reservas associated to a specific restaurant
     @PersistenceContext
     private EntityManager em;
 

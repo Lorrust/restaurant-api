@@ -54,6 +54,6 @@ public class ReservaEntity {
     }
 
     public void updateReserva(ReservaDto updatedReserva) {
-        this.dataReserva = updatedReserva.getDataReserva();
+        this.status = updatedReserva.getStatus();
     }
 }

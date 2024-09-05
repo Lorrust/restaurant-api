@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import youngdev.restaurantapi.dto.ReservaDto;
 import youngdev.restaurantapi.entity.ReservaEntity;
+import youngdev.restaurantapi.enums.StatusEnum;
 import youngdev.restaurantapi.repository.ReservaRepository;
 import youngdev.restaurantapi.service.ClienteService;
 import youngdev.restaurantapi.service.MesaService;
 import youngdev.restaurantapi.service.ReservaService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +43,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public ReservaDto postReserva(ReservaDto newReserva) {
+        validateReserva(newReserva);
         var cliente = clienteService.getClienteEntityById(newReserva.getClienteId());
         var mesa = mesaService.getMesaEntityById(newReserva.getMesaId());
         var reservaEntity = new ReservaEntity(newReserva, cliente, mesa);
@@ -52,6 +55,15 @@ public class ReservaServiceImpl implements ReservaService {
     public ReservaDto updateReserva(Long id, ReservaDto updatedReserva) {
         Optional<ReservaEntity> reservaEntity = repository.findById(id);
         if (reservaEntity.isPresent()) {
+            if (StatusEnum.CANCELADA.equals(updatedReserva.getStatus())) {
+                if (LocalDate.now().isBefore(getReservaById(id).getDataReserva())) {
+                    reservaEntity.get().updateReserva(updatedReserva);
+                    var reservaPersistido = repository.save(reservaEntity.get());
+                    return new ReservaDto(reservaPersistido);
+                } else {
+                    throw new IllegalArgumentException("Deve-se cancelar a reserva com um dia de antecedencia");
+                }
+            }
             reservaEntity.get().updateReserva(updatedReserva);
             var reservaPersistido = repository.save(reservaEntity.get());
             return new ReservaDto(reservaPersistido);
@@ -63,4 +75,15 @@ public class ReservaServiceImpl implements ReservaService {
     public void deleteReserva(Long id) {
         repository.deleteById(id);
     }
+
+    public void validateReserva(ReservaDto reservaDto) {
+        pastReserva(reservaDto.getDataReserva());
+    }
+
+    public void pastReserva(LocalDate date) {
+        if (date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Data invalida");
+        }
+    }
+
 }

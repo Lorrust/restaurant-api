@@ -12,6 +12,7 @@ import youngdev.restaurantapi.repository.ClienteRepository;
 import youngdev.restaurantapi.service.ClienteService;
 import youngdev.restaurantapi.service.RestauranteService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteDto postCliente(ClienteDto newCliente) {
+
+        clienteValidation(newCliente);
+
         String correctCpf = cleanCpf(newCliente.getCpf());
 
         var clienteEntity = new ClienteEntity(newCliente, new RestauranteEntity(restauranteService.getRestauranteById(newCliente.getRestaurantId())));
@@ -84,6 +88,16 @@ public class ClienteServiceImpl implements ClienteService {
             throw new IllegalArgumentException("CPF invalido");
         }
         return numberCpf;
+    }
+
+    private void clienteValidation(ClienteDto clienteDto) {
+        clienteBirth(clienteDto.getDataNascimento());
+    }
+
+    private void clienteBirth(LocalDate birthDate) {
+        if (LocalDate.now().getYear() - birthDate.getYear() > 100 || LocalDate.now().getYear() - birthDate.getYear() < 12) {
+            throw new IllegalArgumentException("Idade invalida");
+        }
     }
 
 }

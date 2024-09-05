@@ -41,11 +41,13 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 //    TODO: Fix funcionario creation, not working at the moment
     @Override
     public FuncionarioDto postFuncionario(FuncionarioDto newFuncionario) {
-        var funcionarioEntity = new FuncionarioEntity(newFuncionario, new RestauranteEntity(restauranteService.getRestauranteById(newFuncionario.getRestauranteId())));
+        var restaurante = restauranteService.getRestauranteById(newFuncionario.getRestauranteId());
+        var funcionarioEntity = new FuncionarioEntity(newFuncionario, new RestauranteEntity(restaurante));
         var funcionarioPersistido = repository.save(funcionarioEntity);
         return new FuncionarioDto(funcionarioPersistido);
     }
 
+//    TODO: Implement funcionario update
     @Override
     public FuncionarioDto updateFuncionario(Long id, FuncionarioDto updatedFuncionario) {
         return null;

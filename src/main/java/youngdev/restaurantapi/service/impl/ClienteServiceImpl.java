@@ -3,7 +3,6 @@ package youngdev.restaurantapi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import youngdev.restaurantapi.dto.ClienteDto;
-import youngdev.restaurantapi.dto.RestauranteDto;
 import youngdev.restaurantapi.entity.ClienteEntity;
 import youngdev.restaurantapi.entity.RestauranteEntity;
 import youngdev.restaurantapi.repository.ClienteRepository;
@@ -31,6 +30,11 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteDto getClienteById(Long id) {
         return repository.findById(id).map(ClienteDto::new).orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Override
+    public ClienteEntity getClienteEntityById(Long id) {
+        return repository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
     @Override

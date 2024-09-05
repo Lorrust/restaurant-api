@@ -53,4 +53,7 @@ public class ReservaEntity {
         this.observacao = reserva.getObservacao();
     }
 
+    public void updateReserva(ReservaDto updatedReserva) {
+        this.dataReserva = updatedReserva.getDataReserva();
+    }
 }

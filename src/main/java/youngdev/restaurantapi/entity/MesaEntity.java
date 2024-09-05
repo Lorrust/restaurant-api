@@ -37,4 +37,8 @@ public class MesaEntity {
         this.capacidadePessoas = mesa.getCapacidadePessoas();
     }
 
+    public MesaEntity updateMesa(MesaDto updatedMesa) {
+        this.capacidadePessoas = updatedMesa.getCapacidadePessoas();
+        return this;
+    }
 }

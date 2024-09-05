@@ -5,11 +5,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.Setter;
 import youngdev.restaurantapi.enums.SexoEnum;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @MappedSuperclass
 public class PessoaBaseEntity {
 

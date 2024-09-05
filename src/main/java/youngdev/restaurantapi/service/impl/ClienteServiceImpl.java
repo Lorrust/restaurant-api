@@ -1,6 +1,9 @@
 package youngdev.restaurantapi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import youngdev.restaurantapi.dto.ClienteDto;
 import youngdev.restaurantapi.entity.ClienteEntity;
@@ -22,10 +25,16 @@ public class ClienteServiceImpl implements ClienteService {
     private RestauranteService restauranteService;
 
     @Override
-    public List<ClienteDto> getAllClientes() {
-        List<ClienteEntity> clienteEntityList = repository.findAll();
-        return clienteEntityList.stream().map(ClienteDto::new).toList();
+    public Page<ClienteDto> getAllClientes(Pageable pageable, String search) {
+        Page<ClienteEntity> clienteEntityPage;
+        if (search != null && !search.isEmpty()) {
+            clienteEntityPage = repository.findByNomeContaining(search, pageable);
+        } else {
+            clienteEntityPage = repository.findAll(pageable);
+        }
+        return clienteEntityPage.map(ClienteDto::new);
     }
+
 
     @Override
     public ClienteDto getClienteById(Long id) {
@@ -44,7 +53,11 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteDto postCliente(ClienteDto newCliente) {
+        String correctCpf = cleanCpf(newCliente.getCpf());
+
         var clienteEntity = new ClienteEntity(newCliente, new RestauranteEntity(restauranteService.getRestauranteById(newCliente.getRestaurantId())));
+        clienteEntity.setCpf(correctCpf);
+
         var clientePersistido = repository.save(clienteEntity);
         return new ClienteDto(clientePersistido);
     }
@@ -63,6 +76,14 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public void deleteCliente(Long id) {
         repository.deleteById(id);
+    }
+
+    private String cleanCpf(String cpf) {
+        String numberCpf = cpf.replaceAll("\\D", "");
+        if (numberCpf.isEmpty()) {
+            throw new IllegalArgumentException("CPF invalido");
+        }
+        return numberCpf;
     }
 
 }

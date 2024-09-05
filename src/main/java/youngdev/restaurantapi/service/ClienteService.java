@@ -1,6 +1,8 @@
 package youngdev.restaurantapi.service;
 
 import lombok.Getter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import youngdev.restaurantapi.dto.ClienteDto;
 import youngdev.restaurantapi.entity.ClienteEntity;
 
@@ -8,7 +10,7 @@ import java.util.List;
 
 public interface ClienteService {
 
-    List<ClienteDto> getAllClientes();
+    Page<ClienteDto> getAllClientes(Pageable pageable, String search);
 
     ClienteDto getClienteById(Long id);
 

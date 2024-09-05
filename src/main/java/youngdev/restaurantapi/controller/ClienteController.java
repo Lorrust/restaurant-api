@@ -1,6 +1,8 @@
 package youngdev.restaurantapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,10 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping()
-    public List<ClienteDto> getAllClientes() {
-        return clienteService.getAllClientes();
+    public Page<ClienteDto> getAllClientes(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                           @RequestParam(defaultValue = "10", required = false) Integer size,
+                                           @RequestParam(required = false) String search) {
+        return clienteService.getAllClientes(Pageable.ofSize(size).withPage(page), search);
     }
 
     @GetMapping("/{id}")

@@ -7,11 +7,14 @@ import youngdev.restaurantapi.dto.FuncionarioDto;
 import youngdev.restaurantapi.entity.ClienteEntity;
 import youngdev.restaurantapi.entity.FuncionarioEntity;
 import youngdev.restaurantapi.entity.RestauranteEntity;
+import youngdev.restaurantapi.enums.CargoEnum;
 import youngdev.restaurantapi.repository.ClienteRepository;
 import youngdev.restaurantapi.repository.FuncionarioRepository;
 import youngdev.restaurantapi.service.FuncionarioService;
 import youngdev.restaurantapi.service.RestauranteService;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -38,9 +41,13 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         return repository.findAllByRestauranteId(restauranteId).stream().map(FuncionarioDto::new).toList();
     }
 
-//    TODO: Fix funcionario creation, not working at the moment
     @Override
     public FuncionarioDto postFuncionario(FuncionarioDto newFuncionario) {
+
+        cleanCpf(newFuncionario.getCpf());
+
+        funcionarioValidation(newFuncionario);
+
         var restaurante = restauranteService.getRestauranteById(newFuncionario.getRestauranteId());
         var funcionarioEntity = new FuncionarioEntity(newFuncionario, new RestauranteEntity(restaurante));
         var funcionarioPersistido = repository.save(funcionarioEntity);
@@ -57,4 +64,37 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     public void deleteFuncionario(Long id) {
         repository.deleteById(id);
     }
+
+    private String cleanCpf(String cpf) {
+        String numberCpf = cpf.replaceAll("\\D", "");
+        if (numberCpf.isEmpty()) {
+            throw new IllegalArgumentException("CPF invalido");
+        }
+        return numberCpf;
+    }
+
+    private void funcionarioValidation(FuncionarioDto funcionario) {
+        funcionarioBirth(funcionario.getDataNascimento());
+        validateWorkTime(funcionario.getCargaHoraria());
+        validateSalario(funcionario.getCargo(), funcionario.getSalario());
+    }
+
+    private void funcionarioBirth(LocalDate birthDate) {
+        if (LocalDate.now().getYear() - birthDate.getYear() > 100 || LocalDate.now().getYear() - birthDate.getYear() < 12) {
+            throw new IllegalArgumentException("Idade invalida");
+        }
+    }
+
+    private void validateWorkTime(Integer hours) {
+        if (hours > 220) {
+            throw new IllegalArgumentException("Work time cannot be above 220 limit");
+        }
+    }
+
+    private void validateSalario(CargoEnum cargo, BigDecimal salario) {
+        if (salario.compareTo(BigDecimal.valueOf(1200)) < 0 && !CargoEnum.FREELANCER.equals(cargo)) {
+            throw new IllegalArgumentException("Salario nao atende valor minimo para empregado");
+        }
+    }
+
 }

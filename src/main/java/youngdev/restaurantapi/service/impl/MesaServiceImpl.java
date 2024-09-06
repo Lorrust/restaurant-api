@@ -1,6 +1,8 @@
 package youngdev.restaurantapi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import youngdev.restaurantapi.dto.FuncionarioDto;
 import youngdev.restaurantapi.dto.MesaDto;
@@ -10,6 +12,7 @@ import youngdev.restaurantapi.repository.MesaRepository;
 import youngdev.restaurantapi.service.MesaService;
 import youngdev.restaurantapi.service.RestauranteService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,11 @@ public class MesaServiceImpl implements MesaService {
     public List<MesaDto> getAllMesas() {
         List<MesaEntity> MesaEntityList = repository.findAll();
         return MesaEntityList.stream().map(MesaDto::new).toList();
+    }
+
+    @Override
+    public Page<MesaDto> getMesasDisponiveis(Pageable pageable, Long restauranteId, Integer numPessoas, LocalDate data) {
+        return repository.getMesasDisponiveis(pageable, restauranteId, numPessoas, data);
     }
 
     @Override

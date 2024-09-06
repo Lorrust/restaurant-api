@@ -1,10 +1,13 @@
 package youngdev.restaurantapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import youngdev.restaurantapi.dto.MesaDto;
 import youngdev.restaurantapi.service.MesaService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,11 @@ public class MesaController {
     @GetMapping
     public List<MesaDto> getAllMesas() {
         return mesaService.getAllMesas();
+    }
+
+    @GetMapping("/disponiveis")
+    public Page<MesaDto> getMesasDisponiveis(@RequestParam LocalDate data, @RequestParam Integer quantidadePessoas, @RequestParam Long restauranteId) {
+        return mesaService.getMesasDisponiveis(Pageable.ofSize(10), restauranteId, quantidadePessoas, data);
     }
 
     @GetMapping("/{id}")

@@ -15,7 +15,7 @@ public class ReservaRepositoryCustomImpl implements ReservaRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
-    final QRestauranteEntity reserva = QRestauranteEntity.restauranteEntity;
+    final QRestauranteEntity restaurante = QRestauranteEntity.restauranteEntity;
 
     @Override
     public List<ReservaDto> getReservasByRestaurante(Long id) {

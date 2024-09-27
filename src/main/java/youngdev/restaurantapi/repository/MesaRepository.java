@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface MesaRepository extends JpaRepository<MesaEntity, Long> {
+public interface MesaRepository extends JpaRepository<MesaEntity, Long>, MesaRepositoryCustom {
 
     List<MesaEntity> findAllByRestauranteId(Long restauranteId);
 
